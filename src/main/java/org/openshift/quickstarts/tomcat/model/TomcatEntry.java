@@ -1,11 +1,11 @@
-package org.openshift.quickstarts.todolist.model;
+package org.openshift.quickstarts.tomcat.model;
 
 import java.io.Serializable;
 
 /**
  *
  */
-public class TodoEntry {
+public class TomcatEntry {
 
     private Serializable id;
 
@@ -13,14 +13,14 @@ public class TodoEntry {
 
     private String description;
 
-    public TodoEntry() {
+    public TomcatEntry() {
     }
 
-    public TodoEntry(String summary, String description) {
+    public TomcatEntry(String summary, String description) {
         this(null, summary, description);
     }
 
-    public TodoEntry(Serializable id, String summary, String description) {
+    public TomcatEntry(Serializable id, String summary, String description) {
         this.id = id;
         this.summary = summary;
         this.description = description;
@@ -49,14 +49,5 @@ public class TodoEntry {
 
     public void setId(Serializable id) {
         this.id = id;
-    }
-
-    @Override
-    public String toString() {
-        return "TodoEntry{" +
-                "id=" + id +
-                ", summary='" + summary + '\'' +
-                ", description='" + description + '\'' +
-                '}';
     }
 }

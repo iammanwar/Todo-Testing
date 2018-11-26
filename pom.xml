@@ -19,11 +19,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.openshift.quickstarts</groupId>
-    <artifactId>todolist-jdbc</artifactId>
+    <artifactId>tomcat-jdbc</artifactId>
     <version>1.2.0.Final</version>
     <packaging>war</packaging>
-    <name>OpenShift Quickstarts: Todo List: JDBC</name>
-    <description>Todo list</description>
+    <name>OpenShift Quickstarts: Tomcat List: JDBC</name>
+    <description>Tomcat list</description>
 
     <url>http://jboss.org/jbossas</url>
     <licenses>

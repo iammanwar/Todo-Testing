@@ -1,6 +1,6 @@
-package org.openshift.quickstarts.todolist.dao;
+package org.openshift.quickstarts.tomcat.dao;
 
-import org.openshift.quickstarts.todolist.model.TodoEntry;
+import org.openshift.quickstarts.tomcat.model.TomcatEntry;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -16,11 +16,11 @@ import java.util.Random;
  *  TODO: proper exception handling
  *  TODO: initialize schema whenever necessary (what if db is not persistent and is restarted while app is running)
  */
-public class JdbcTodoListDAO implements TodoListDAO {
+public class JdbcTomcatDAO implements TomcatDAO {
 
     private final DataSource dataSource;
 
-    public JdbcTodoListDAO() {
+    public JdbcTomcatDAO() {
         dataSource = lookupDataSource();
         initializeSchemaIfNeeded();
     }
@@ -35,7 +35,7 @@ public class JdbcTodoListDAO implements TodoListDAO {
                 return (DataSource) envContext.lookup(System.getenv("DB_JNDI"));
             }
         } catch (NamingException e) {
-            throw new DataAccessException("Could not look up datasource", e);
+            throw new RuntimeException("Could not look up datasource", e);
         }
     }
 
@@ -56,7 +56,7 @@ public class JdbcTodoListDAO implements TodoListDAO {
                 connection.close();
             }
         } catch (SQLException e) {
-            throw new DataAccessException("could not initialize database schema", e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -70,7 +70,7 @@ public class JdbcTodoListDAO implements TodoListDAO {
     }
 
     @Override
-    public void save(TodoEntry entry) {
+    public void save(TomcatEntry entry) {
         try {
             Connection connection = getConnection();
             try {
@@ -88,7 +88,7 @@ public class JdbcTodoListDAO implements TodoListDAO {
                 connection.close();
             }
         } catch (SQLException e) {
-            throw new DataAccessException("Could not save entry " + entry, e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -97,33 +97,34 @@ public class JdbcTodoListDAO implements TodoListDAO {
     }
 
     @Override
-    public List<TodoEntry> list() {
+    public List<TomcatEntry> list() {
         try {
             Connection connection = getConnection();
             try {
                 Statement statement = connection.createStatement();
+                List<TomcatEntry> list;
                 try {
                     ResultSet rset = statement.executeQuery("SELECT id, summary, description FROM todo_entries");
                     try {
-                        List<TodoEntry> list = new ArrayList<TodoEntry>();
+                        list = new ArrayList<TomcatEntry>();
                         while (rset.next()) {
                             Long id = rset.getLong(1);
                             String summary = rset.getString(2);
-                            String description = rset.getString(3);
-                            list.add(new TodoEntry(id, summary, description));
+                            String description = rset.getString(2);
+                            list.add(new TomcatEntry(id, summary, description));
                         }
-                        return list;
                     } finally {
                         rset.close();
                     }
                 } finally {
                     statement.close();
                 }
+                return list;
             } finally {
                 connection.close();
             }
         } catch (SQLException e) {
-            throw new DataAccessException("Could not list entries", e);
+            throw new RuntimeException(e);
         }
     }
 
